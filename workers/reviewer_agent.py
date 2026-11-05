@@ -1,18 +1,5 @@
-from openai import OpenAI
-from dotenv import load_dotenv
+from llm import call_llm
 import json
-import os
-
-
-load_dotenv()
-
-
-client = OpenAI(
-    base_url=os.getenv("BASE_URL"),
-    api_key=os.getenv("API_KEY")
-)
-
-
 def review(
     task,
     code
@@ -60,9 +47,8 @@ Use "needs_revision" when the solution
 requires a correction.
 """
 
-    response = client.chat.completions.create(
-        model=os.getenv("MODEL"),
-        messages=[
+    response = call_llm(
+                messages=[
             {
                 "role": "user",
                 "content": prompt
@@ -70,13 +56,8 @@ requires a correction.
         ]
     )
 
-    result = (
-        response
-        .choices[0]
-        .message
-        .content
-        .strip()
-    )
+    result = response.strip()
+    
 
     return json.loads(result)
 

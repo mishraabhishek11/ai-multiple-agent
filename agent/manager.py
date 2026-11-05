@@ -1,23 +1,38 @@
-from openai import OpenAI
-from dotenv import load_dotenv
-import os
-
-from research_agent import research
-from coding_agent import write_code
-from reviewer_agent import review
-from state import create_state
-
-
-load_dotenv()
-
-
-client = OpenAI(
-    base_url=os.getenv("BASE_URL"),
-    api_key=os.getenv("API_KEY")
+# Remove from openai import OpenAI
+# Remove from dotenv import # 
+# Remove load_dotenv
+# Remove import os
+# Added llm below
+from llm import call_llm
+# Added validation below
+from validation import (
+    validate_task
 )
 
+# Added Logger
+from logger import logger
 
-MAX_REVISIONS = 3
+from workers.research_agent import research
+from workers.coding_agent import write_code
+from workers.reviewer_agent import review
+from agent.state import create_state
+
+
+# Remove load_dotenv()
+
+
+# Remove client = OpenAI(
+#  base_url=os.getenv("BASE_URL"),
+#   api_key=os.getenv("API_KEY")
+# ) 
+
+
+# Remove MAX_REVISIONS = 3
+# Added below line
+from config import (
+    MAX_REVISIONS
+)
+
 
 
 def choose_worker(state):
@@ -83,9 +98,8 @@ coding
 review
 finish
 """
-
-    response = client.chat.completions.create(
-        model=os.getenv("MODEL"),
+    # Modified to call_llm
+    response = call_llm(
         messages=[
             {
                 "role": "user",
@@ -94,26 +108,30 @@ finish
         ]
     )
 
-    return (
-        response
-        .choices[0]
-        .message
-        .content
-        .strip()
-        .lower()
-    )
+    return response.strip().lower()
+    
 
 
 def run_manager(task):
-
+    # Added validate_task here
+    task = validate_task(task)
     state = create_state(
         task
     )
+    # Added logger here
+    logger.info(
+    f"Starting manager for task: {task}"
+    )
+
 
     while True:
 
         worker = choose_worker(
             state
+        )
+        # Logger added here
+        logger.info(
+    f"Manager selected: {worker}"
         )
 
         print(
@@ -141,6 +159,11 @@ def run_manager(task):
                 print(
                 "Maximum revisions reached."
                 )
+                # Added Logger
+                logger.warning(
+        f"Maximum steps reached: {MAX_REVISIONS}"
+                )
+
 
                 break
 
@@ -181,6 +204,10 @@ def run_manager(task):
             )
 
         elif worker == "finish":
+            # Added Logger here
+            logger.info(
+            "Manager finished the workflow."
+            )
 
             break
 

@@ -1,4 +1,4 @@
-from manager import run_manager
+from agent.manager import run_manager
 
 
 def main():
@@ -10,10 +10,13 @@ def main():
     task = input(
         "\nEnter your task: "
     )
+    try:
+        state = run_manager( task ) 
 
-    state = run_manager(
-        task
-    )
+    except ValueError as e:
+        print(f"\nValidation error: {e}")
+
+    return
 
     print("\n" + "=" * 50)
     print(" RESEARCH")

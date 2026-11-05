@@ -1,17 +1,17 @@
-from openai import OpenAI
-from dotenv import load_dotenv
-import os
+#from openai import OpenAI
+#from dotenv import load_dotenv
+#import os
 
 
-load_dotenv()
+#load_dotenv()
 
 
-client = OpenAI(
-    base_url=os.getenv("BASE_URL"),
-    api_key=os.getenv("API_KEY")
-)
+#client = OpenAI(
+ #   base_url=os.getenv("BASE_URL"),
+#    api_key=os.getenv("API_KEY")
+#)
 
-
+from llm import call_llm
 def research(task):
 
     prompt = f"""
@@ -32,9 +32,8 @@ Keep the response concise and useful
 for another AI agent.
 """
 
-    response = client.chat.completions.create(
-        model=os.getenv("MODEL"),
-        messages=[
+    response = call_llm(
+                messages=[
             {
                 "role": "user",
                 "content": prompt
@@ -42,4 +41,4 @@ for another AI agent.
         ]
     )
 
-    return response.choices[0].message.content
+    return response
