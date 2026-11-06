@@ -63,14 +63,14 @@ The project also includes the pieces a real agent system needs around the LLM: c
 
 - `config.py` loads settings from `.env` with sensible defaults (a local Ollama endpoint)
 
-| Variable        | Default                     | Purpose                          |
-| --------------- | --------------------------- | -------------------------------- |
-| `MODEL`         | `qwen3:1.7b`                | Chat model name                  |
-| `BASE_URL`      | `http://localhost:11434/v1` | OpenAI-compatible API base URL   |
-| `API_KEY`       | `ollama`                    | API key                          |
-| `MAX_REVISIONS` | `8`                         | Max coding revisions             |
-| `MAX_RETRIES`   | `3`                         | LLM call attempts before failing |
-| `TIMEOUT`       | `60`                        | LLM request timeout in seconds   |
+| Variable        | Purpose                          |
+| --------------- | -------------------------------- |
+| `MODEL`         | Chat model name                  |
+| `BASE_URL`      | OpenAI-compatible API base URL   |
+| `API_KEY`       | API key                          |
+| `MAX_REVISIONS` | Max coding revisions             |
+| `MAX_RETRIES`   | LLM call attempts before failing |
+| `TIMEOUT`       | LLM request timeout in seconds   |
 
 ---
 
